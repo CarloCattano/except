@@ -17,16 +17,16 @@
 static t_class *except_class;
 
 typedef struct _except {
-  t_object  exObj;
+  t_object      exObj;
  
-  t_float   input_number;
+  t_float       input_number;
 
-  t_float   *ignore;
-  t_int     ignore_size;
+  t_float       *ignore;
+  t_int         ignore_size;
 
-  t_outlet  *filtered, *exceptions;
+  t_outlet      *filtered, *exceptions;
 
-}           t_except;
+}               t_except;
 
 /**
  * @brief Check if the input number is in the ignore list
@@ -53,7 +53,6 @@ void check_number(t_except *x, t_floatarg f) {
     }
     found = 0;
   }
-
   found ? outlet_float(x->exceptions, x->input_number) : outlet_float(x->filtered, x->input_number);
 }
 
@@ -97,7 +96,7 @@ void *except_new(t_symbol *s, int ac, t_atom *av) {
  
   (void)s;
 
-  if (ac > 1) {
+  if (ac > 0) {
     x->ignore_size = ac;
     x->ignore = (t_float *)calloc(ac, sizeof(t_float));   
 
@@ -130,4 +129,6 @@ void except_setup(void) {
 
   class_addfloat(except_class, check_number);
   class_addmethod(except_class, (t_method)get_ignored, gensym("get_ignored"), A_GIMME, 0);
+
+  class_sethelpsymbol(except_class, gensym("except"));
 }
